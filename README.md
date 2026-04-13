@@ -97,6 +97,15 @@ All three algorithms are implemented in [`sorting_algorithms.py`](sorting_algori
 - **Timing method:** `time.perf_counter()` averaged over 3 runs per size
 - **Environment:** Python (CPython), single-threaded
 
+### 6.1.1 Synthetic Data Generator
+
+Use [`generate_synthetic_data.py`](generate_synthetic_data.py) to create the larger datasets required for Task 4.
+
+
+```bash
+python generate_synthetic_data.py
+```
+
 ### 6.2 Performance Graph
 
 ![Sorting Algorithm Comparison](sorting_comparison.png)

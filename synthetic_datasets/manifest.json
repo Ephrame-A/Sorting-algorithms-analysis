@@ -1,0 +1,68 @@
+{
+  "seed": 42,
+  "min_price": 10,
+  "max_price": 100000,
+  "start_product_id": 1000,
+  "datasets": [
+    {
+      "size": 100,
+      "file": "products_100.csv",
+      "first_record": [
+        1000,
+        83820
+      ],
+      "last_record": [
+        1099,
+        49745
+      ]
+    },
+    {
+      "size": 500,
+      "file": "products_500.csv",
+      "first_record": [
+        1100,
+        35392
+      ],
+      "last_record": [
+        1599,
+        53235
+      ]
+    },
+    {
+      "size": 1000,
+      "file": "products_1000.csv",
+      "first_record": [
+        1600,
+        71829
+      ],
+      "last_record": [
+        2599,
+        95331
+      ]
+    },
+    {
+      "size": 5000,
+      "file": "products_5000.csv",
+      "first_record": [
+        2600,
+        86373
+      ],
+      "last_record": [
+        7599,
+        13511
+      ]
+    },
+    {
+      "size": 10000,
+      "file": "products_10000.csv",
+      "first_record": [
+        7600,
+        12534
+      ],
+      "last_record": [
+        17599,
+        76929
+      ]
+    }
+  ]
+}
