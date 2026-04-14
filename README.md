@@ -92,8 +92,9 @@ All three algorithms are implemented in [`sorting_algorithms.py`](sorting_algori
 
 ### 6.1 Experimental Setup
 
-- **Input sizes tested:** 100 · 500 · 1,000 · 5,000 · 10,000 · 50,000 · 100,000
-- **Data:** Randomly generated `(Product_ID, Price)` tuples with prices in range `[10, 100000]`
+- **Input sizes tested:** 100 · 500 · 1,000 · 3,000 · 5,000 · 10,000 · 30,000 · 50,000 · 70,000 · 100,000
+- **Data source:** Pre-generated CSV datasets in `synthetic_datasets/`, loaded through `manifest.json`
+- **Data range:** Prices in ETB within `[10, 100000]`
 - **Timing method:** `time.perf_counter()` averaged over 3 runs per size
 - **Environment:** Python (CPython), single-threaded
 
@@ -108,6 +109,19 @@ The full experimental setup listed above also includes **50,000** and **100,000*
 python generate_synthetic_data.py
 ```
 
+The generator now creates:
+
+- `products_100.csv`
+- `products_500.csv`
+- `products_1000.csv`
+- `products_3000.csv`
+- `products_5000.csv`
+- `products_10000.csv`
+- `products_30000.csv`
+- `products_50000.csv`
+- `products_70000.csv`
+- `products_100000.csv`
+
 ### 6.2 Performance Graph
 
 ![Sorting Algorithm Comparison](sorting_comparison.png)
@@ -119,24 +133,39 @@ The figure presents two views of the same benchmark data:
 | **Left — Linear Scale** | Shows absolute time differences; makes it easy to see which algorithm is slowest at large `n`. |
 | **Right — Log-Log Scale** | Reveals the *growth rate* (slope ≈ exponent); algorithms with the same complexity class appear as parallel lines. |
 
+### 6.2.1 Recorded Benchmark Results (seconds)
+
+| n (elements) | Merge Sort | Quick Sort | Heap Sort |
+|:------------:|-----------:|-----------:|----------:|
+| 100          | 0.000358   | 0.000215   | 0.000436  |
+| 500          | 0.002938   | 0.002591   | 0.002915  |
+| 1,000        | 0.008169   | 0.005069   | 0.011564  |
+| 3,000        | 0.020631   | 0.010074   | 0.021820  |
+| 5,000        | 0.034250   | 0.018050   | 0.041383  |
+| 10,000       | 0.062072   | 0.035941   | 0.082974  |
+| 30,000       | 0.198901   | 0.133280   | 0.300066  |
+| 50,000       | 0.351892   | 0.253230   | 0.546675  |
+| 70,000       | 0.503823   | 0.377785   | 0.791857  |
+| 100,000      | 0.816816   | 0.598565   | 1.246470  |
+
 ### 6.3 Graph Analysis
 
 #### Observations from the Linear-Scale Plot
 
-1. **Heap Sort is the slowest at large `n`.** At `n = 100,000`, Heap Sort takes ≈ **4.0 s**, roughly **2.2× slower** than Quick Sort (≈ 1.8 s) and **3× slower** than Merge Sort (≈ 1.3 s).
-2. **Merge Sort and Quick Sort are close.** Both stay under 2 seconds at `n = 100,000`, with Merge Sort slightly faster in this run.
-3. **All three are nearly indistinguishable for `n ≤ 5,000`.** Below this threshold the performance difference is negligible for practical purposes.
-4. **The growth curve for Heap Sort steepens more aggressively** between `n = 50,000` and `n = 100,000`, indicating higher constant factors despite the same theoretical complexity.
+1. **Heap Sort is the slowest at large `n`.** At `n = 100,000`, Heap Sort takes **1.246 s**, about **2.08× slower** than Quick Sort (**0.599 s**) and about **1.53× slower** than Merge Sort (**0.817 s**).
+2. **Quick Sort is the fastest across all measured sizes** in this implementation and dataset.
+3. **Merge Sort consistently stays in the middle**, slower than Quick Sort but clearly faster than Heap Sort for medium and large inputs.
+4. **Separation increases with size.** From `n = 30,000` onward, the gap is visually clear in both linear and log-log plots.
 
 #### Observations from the Log-Log Plot
 
 1. **All three curves are roughly linear on the log-log plot**, confirming `O(n log n)` behavior — consistent with theory.
 2. **The slopes are approximately parallel**, meaning all three algorithms share the same asymptotic growth rate.
 3. **Vertical separation reveals constant-factor differences:**
-   - Merge Sort sits lowest → smallest constant factor in this implementation.
-   - Quick Sort is in the middle.
+   - Quick Sort sits lowest → smallest constant factor in this implementation.
+   - Merge Sort is in the middle.
    - Heap Sort sits highest → largest constant factor.
-4. **At small `n` (100–500)**, Quick Sort shows slightly higher overhead than Merge Sort, likely due to the list-comprehension-based partitioning creating many small temporary lists.
+4. **At small `n` (100–500)**, differences are minor, but Quick Sort already has a slight lead.
 
 #### Why Heap Sort is Slowest in Practice
 
@@ -146,21 +175,21 @@ Despite having `O(n log n)` worst-case and `O(1)` space, Heap Sort's real-world 
 - **More comparisons per element** — each sift-down in heapify may traverse the full height of the tree (`log n` comparisons), and this happens for every extraction.
 - **Python overhead** — the recursive `heapify` calls and repeated index arithmetic are costly in an interpreted language.
 
-#### Why Merge Sort Edges Out Quick Sort Here
+#### Why Quick Sort Leads Here
 
-In this specific benchmark, Merge Sort is slightly faster than Quick Sort. This is because:
+In this benchmark, Quick Sort performs best because:
 
-- The Quick Sort implementation uses **list comprehensions** for partitioning (not in-place), creating `O(n)` temporary lists at each level — negating Quick Sort's typical in-place advantage.
-- Python's memory allocation overhead for the many small lists in Quick Sort adds up.
-- With an **in-place partition** (Lomuto or Hoare scheme), Quick Sort would likely outperform Merge Sort, as it does in most C/C++ benchmarks.
+- The dataset is random and does not trigger the Quick Sort worst-case pattern.
+- The recursive partitioning overhead remains lower than the combined copy/merge overhead of Merge Sort in these runs.
+- Heap Sort still pays a larger constant factor due to heap operations and cache-unfriendly access.
 
 ### 6.4 Growth Rate Summary
 
 | Range           | Behavior                                                        |
 |:----------------|:----------------------------------------------------------------|
-| n ≤ 1,000       | All three algorithms complete in < 10 ms — negligible difference |
-| 1,000 < n ≤ 10,000 | Heap Sort starts to diverge; Merge & Quick remain close       |
-| n > 10,000      | Clear separation: Merge Sort < Quick Sort < Heap Sort           |
+| n ≤ 1,000       | All three algorithms are fast; Quick Sort is already slightly ahead |
+| 1,000 < n ≤ 10,000 | Clear ordering appears: Quick < Merge < Heap                |
+| n > 10,000      | Separation widens steadily: Quick < Merge < Heap                |
 
 ---
 
@@ -215,7 +244,7 @@ python sorting_algorithms.py
 This will:
 1. Print step-by-step traces for all three algorithms on the 10-product dataset.
 2. Display the complexity comparison table.
-3. Run the experimental evaluation across 7 input sizes (100 → 100,000).
+3. Run the experimental evaluation across 10 generated input sizes (100 → 100,000, including 3,000, 30,000, 50,000, and 70,000).
 4. Save the comparison graph as `sorting_comparison.png`.
 5. Print the real-world decision analysis.
 

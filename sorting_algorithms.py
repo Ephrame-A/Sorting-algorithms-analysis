@@ -219,6 +219,7 @@ def print_complexity_table():
 
 # --- TASK 4: Experimental Evaluation ---
 DATASET_DIR = Path("synthetic_datasets")
+REQUIRED_DATASET_SIZES = [100, 500, 1000, 3000, 5000, 10000, 30000, 50000, 70000, 100000]
 
 
 def load_generated_datasets(dataset_dir=DATASET_DIR):
@@ -272,11 +273,19 @@ def measure_time(sort_func, data, runs=3):
 def experimental_evaluation():
     """Run experimental evaluation and return results."""
     generated_datasets = load_generated_datasets()
-    sizes = sorted(generated_datasets.keys())
+    missing_sizes = [size for size in REQUIRED_DATASET_SIZES if size not in generated_datasets]
+    if missing_sizes:
+        raise ValueError(
+            "Missing required dataset sizes in synthetic_datasets/manifest.json: "
+            f"{missing_sizes}. Run generate_synthetic_data.py to regenerate datasets."
+        )
+
+    sizes = REQUIRED_DATASET_SIZES
     results = {"Merge Sort": [], "Quick Sort": [], "Heap Sort": []}
     
     print("\nRunning experimental evaluation...")
-    print("Using generated datasets from synthetic_datasets/\n")
+    print("Using generated datasets from synthetic_datasets/")
+    print(f"Sizes: {sizes}\n")
     
     for n in sizes:
         print(f"  Testing n = {n:>7,}...", end=" ", flush=True)
