@@ -41,27 +41,87 @@
       ]
     },
     {
-      "size": 5000,
-      "file": "products_5000.csv",
+      "size": 3000,
+      "file": "products_3000.csv",
       "first_record": [
         2600,
         86373
       ],
       "last_record": [
-        7599,
-        13511
+        5599,
+        38664
+      ]
+    },
+    {
+      "size": 5000,
+      "file": "products_5000.csv",
+      "first_record": [
+        5600,
+        2641
+      ],
+      "last_record": [
+        10599,
+        86680
       ]
     },
     {
       "size": 10000,
       "file": "products_10000.csv",
       "first_record": [
-        7600,
-        12534
+        10600,
+        32021
       ],
       "last_record": [
-        17599,
-        76929
+        20599,
+        42525
+      ]
+    },
+    {
+      "size": 30000,
+      "file": "products_30000.csv",
+      "first_record": [
+        20600,
+        52863
+      ],
+      "last_record": [
+        50599,
+        31733
+      ]
+    },
+    {
+      "size": 50000,
+      "file": "products_50000.csv",
+      "first_record": [
+        50600,
+        99484
+      ],
+      "last_record": [
+        100599,
+        69965
+      ]
+    },
+    {
+      "size": 70000,
+      "file": "products_70000.csv",
+      "first_record": [
+        100600,
+        79656
+      ],
+      "last_record": [
+        170599,
+        53117
+      ]
+    },
+    {
+      "size": 100000,
+      "file": "products_100000.csv",
+      "first_record": [
+        170600,
+        86621
+      ],
+      "last_record": [
+        270599,
+        5798
       ]
     }
   ]

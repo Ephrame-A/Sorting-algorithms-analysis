@@ -10,7 +10,7 @@ import random
 from pathlib import Path
 
 
-SIZES = [100, 500, 1000, 5000, 10000]
+SIZES = [100, 500, 1000, 3000, 5000, 10000, 30000, 50000, 70000, 100000]
 OUTPUT_DIR = Path("synthetic_datasets")
 SEED = 42
 MIN_PRICE = 10
