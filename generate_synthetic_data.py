@@ -29,7 +29,7 @@ def generate_dataset(size, rng, start_product_id, min_price, max_price):
 def write_csv(path, dataset):
     """Write a dataset to CSV."""
     with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.writer(handle)
+        writer = csv.writer(handle, lineterminator="\n")
         writer.writerow(["Product_ID", "Price_ETB"])
         writer.writerows(dataset)
 
